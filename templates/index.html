@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script>
+    function myFunction() {
+        window.location = "http://www.google.com";
+        }
+    </script>
+
+    <style>
+table, th, td {
+border-collapse: collapse;
+border: 1px solid black;
+table-layout: fixed;
+width: 100px;
+height: 100px;
+cursor: pointer;
+onclick:myFunction();
+}
+    </style>
+
+</head>
+<body>
+
+ <table onclick="myFunction()">
+  <tr>
+    <td>Jill</td>
+    <td>Smith</td>
+    <td>50</td>
+  </tr>
+  <tr>
+    <td>Eve</td>
+    <td>Jackson</td>
+    <td>94</td>
+  </tr>
+</table>
+
+<form name="calendar" action="/" method="post">
+  <p>
+    {% for day in weekdays %}
+      <a href="/varaus?date={% print(day.weekday) %}">Varaus {% print(day.weekday) %}</a>
+    <input type="checkbox" name="day" value="{% print(day.weekday) %}" id="{% print(day.weekday) %}" />{% print(day.weekday) %}
+    {% if day.varattu: %}
+    <font color="red">varattu</font>
+    {% endif %}
+    <br>
+    {% endfor %}
+  </p>
+  <p><input type=submit name="send" value="lähetä"></p>
+</form>
+
+</body>
+</html>
