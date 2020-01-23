@@ -1,11 +1,7 @@
 import datetime
-import time
-from datetime import timedelta
-from enum import Enum
 
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///mytestdb.db"
