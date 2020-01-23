@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+<body>
+
+  <p>
+      Poistetaanko varaus "{% print(viikonpv + " "  + pvm + " " + aloitus + "-" + lopetus + ", varaaja: " + varaaja )%}"?<br>
+
+      <a href="/">PERUUTA</a>
+      <a href="/poistaOikeasti?pvm={% print(pvm + "&aloitus=" + aloitus) %}">POISTA</a>
+  </p>
+
+</body>
+</html>

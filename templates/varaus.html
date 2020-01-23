@@ -2,64 +2,42 @@
 <html>
 <head>
 
-    <script>
-    function myFunction() {
-        window.location = "http://www.google.com";
-        }
-    </script>
-
-    <style>
-table, th, td {
-border-collapse: collapse;
-border: 1px solid black;
-table-layout: fixed;
-width: 100px;
-height: 100px;
-cursor: pointer;
-onclick:myFunction();
-}
-    </style>
-
 </head>
 <body>
 
- <table onclick="myFunction()">
-  <tr>
-    <td>Jill</td>
-    <td>Smith</td>
-    <td>50</td>
-  </tr>
-  <tr>
-    <td>Eve</td>
-    <td>Jackson</td>
-    <td>94</td>
-  </tr>
-</table>
+<h1>{% print(viikonpv + ' ' + pvm) %}</h1>
 
- <h1>Varaan {% print(date) %}</h1>
-
- <form name="kalenteri" action="/" method="post">
-     <p>
- <input type="time" id="aloitus" name="appt" value="00:00"> -
-     <input type="time" id="lopetus" name="appt" value="23:59">
-     </p>
-     <p><input type=submit name="send" value="lähetä"></p>
- </form>
-
- <!--
-<form name="calendar" action="/" method="post">
-  <p>
-    {% for day in weekdays %}
-
-    <input type="checkbox" name="day" value="{% print(day.weekday) %}" id="{% print(day.weekday) %}" />{% print(day.weekday) %}
-    {% if day.varattu: %}
-    <font color="red">varattu</font>
+{% if varausvirhe == True %}
+    <h2><font color="red">Valitsemasi lopetusaika on myöhemmin tai samaan aikaan kuin varauksen aloitus.</font></h2>
     {% endif %}
-    <br>
-    {% endfor %}
-  </p>
-  <p><input type=submit name="send" value="lähetä"></p>
+
+{% if varattuJo == True %}
+    <h2><font color="red">Haluamallesi ajalle oli jo varaus.</font></h2>
+    {% endif %}
+
+{% if muokataan == True %}
+    <form name="kalenteri" action="/?pvm={% print(pvm + "&viikonpv=" + viikonpv + "&muokataan=True") %}" method="post">
+
+{% else %}
+    <form name="kalenteri" action="/?pvm={% print(pvm + "&viikonpv=" + viikonpv + "&muokataan=False") %}" method="post">
+    {% endif %}
+
+    {% if (muokataan == True or varausvirhe == True or varattuJo == True) %}
+      <input type="text" id="varaaja" name="varaaja" value="{%print(varaaja)%}">
+    {% else %}
+      <input type="text" id="varaaja" name="varaaja" value="nimetön">
+    {% endif %}
+
+     {% if muokataan == True %}
+        <input type="hidden" id="vanhaAloitus" name="vanhaAloitus" value="{%print(aloitus)%}">
+        <input type="hidden" id="vanhaLopetus" name="vanhaLopetus" value="{%print(lopetus)%}">
+        {% endif %}
+
+     <input type="time" id="aloitus" name="aloitus" value="{% print(aloitus) %}"> -
+     <input type="time" id="lopetus" name="lopetus" value="{% print(lopetus) %}">
+
+     <input type=submit name="send" value="lähetä">
 </form>
--->
+
 </body>
 </html>
