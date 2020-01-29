@@ -8,8 +8,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///mytestdb.db"
 db = SQLAlchemy(app)
 
 
-#antaa kuluvan viikon päivät
 def annaViikko():
+    """
+    Antaa kuluvan viikon päivät.
+    :return: Lista kuluvan viikon päivistä.
+    """
 
     tanaan = datetime.date.today().isocalendar()
     tamaViikko = tanaan[1]
@@ -67,9 +70,12 @@ class PaivaAika:
             return "torstai"
 
 
-#tarkistetaan onko paallekkaisyytta varausten kanssa
-#ja että varauksen alku on aiemmin kuin loppu
 def tarkistaPaallekkaisyys(aloitus, lopetus):
+    """
+    Tarkistetaan onko paallekkaisyytta varausten kanssa,
+    ja että varauksen alku on aiemmin kuin loppu.
+    """
+
     varaukset = Varaus.query.all()
 
     for var in varaukset:
@@ -79,12 +85,14 @@ def tarkistaPaallekkaisyys(aloitus, lopetus):
             #If TRUE, then the ranges overlap.
             if var.aloitus.strftime("%X") < lopetus.strftime("%X") and aloitus.strftime("%X") < var.lopetus.strftime("%X"):
                 return True
-            else:
-                return False
+            return False
 
     return False
 
 def tulostaVaraukset():
+    """
+    Apufunktio varausten tulostamiseen.
+    """
     varaukset = Varaus.query.all()
     for var in varaukset:
         print(var.aloitus.strftime("%m/%d/%Y %H:%M") + "-" + var.lopetus.strftime("%H:%M"))
@@ -176,6 +184,10 @@ def root_post():
 
 
 def haeVaraukset():
+    """
+    Haetaan kaikki varaukset tietokannasta listaan.
+    :return: lista kaikista varauksista
+    """
     varaukset = Varaus.query.all()
     varauslista = []
     for var in varaukset:
@@ -186,6 +198,10 @@ def haeVaraukset():
 
 @app.route("/poista")
 def poista():
+    """
+    Ohjataan käyttäjä poista-sivulle, jossa voi vielä perua poistamisen.
+    :return: Poista-sivu poistettavan varauksen tiedoilla.
+    """
     ra = request.args
     return render_template("poista.html",  viikonpv=ra["viikonpaiva"], pvm=ra["date"], aloitus=ra["aloitus"],
                            lopetus=ra["lopetus"], varaaja=ra["varaaja"])
@@ -193,6 +209,11 @@ def poista():
 
 @app.route("/poistaOikeasti")
 def poistaOikeasti():
+    """
+    Käyttäjä on varmistanut, että poistettava päivämäärä oli oikea, joten hänet
+    ohjataan takaisin etusivulle.
+    :return: response-tyyppinen redirect-objekti, joka ohjaa etusivulle
+    """
     paramsArgs = request.args
     aloitusTunti = int(paramsArgs["aloitus"][0:2])
     aloitusMinsat = int(paramsArgs["aloitus"][3:5])
@@ -222,6 +243,10 @@ def varaus():
 
 
 def dbinit():
+    """
+    Tyhjennetään tietokanta mahdollisista vanhoista tauluista ja tietueista, ja alustetaan se
+    ohjelman käyttöä varten.
+    """
     db.drop_all()
     db.create_all()
 
